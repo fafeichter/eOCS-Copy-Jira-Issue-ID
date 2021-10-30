@@ -102,9 +102,6 @@ var observer = new MutationObserver(function (mutations) {
             return;
         }
         for (var i = 0; i < mutation.addedNodes.length; i++) {
-            if (mutation.addedNodes[i].classList.contains("css-151rkes")) {
-                debugger;
-            }
             if (mutation.addedNodes[i].classList
                 && !mutation.addedNodes[i].classList.contains("copy-jira-id-button")
             ) {
