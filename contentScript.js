@@ -41,7 +41,7 @@ function getButtonParent() {
         ui_version = 2;
     }
     if (!idContainers || !idContainers.length) {
-4        idContainers = document.getElementsByClassName('css-151rkes');
+        idContainers = document.getElementsByClassName('css-151rkes');
         ui_version = 3;
     }
     if (!idContainers || !idContainers.length) {
