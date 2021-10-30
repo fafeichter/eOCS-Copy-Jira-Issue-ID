@@ -16,26 +16,51 @@ function isJira() {
     return document.getElementsByTagName("body")[0].getAttribute("id") === 'jira'
 }
 
+const debounce = (func, wait) => {
+    let timeout;
+
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+};
+
 function getButtonParent() {
     let idContainers = document.getElementsByClassName('aui-nav-breadcrumbs');
-    let ui_version = 1;
+    let ui_version = 0;
+    if (idContainers && idContainers.length) {
+        ui_version = 1
+    }
     if (!idContainers || !idContainers.length) {
         idContainers = document.getElementsByClassName('BreadcrumbsItem__BreadcrumbsItemElement-sc-1hh8yo5-0');
         ui_version = 2;
     }
+    if (!idContainers || !idContainers.length) {
+4        idContainers = document.getElementsByClassName('css-151rkes');
+        ui_version = 3;
+    }
+    if (!idContainers || !idContainers.length) {
+        return undefined;
+    }
 
-    if (idContainers && idContainers.length) {
 
-        switch (ui_version) {
-            case 1:
-                const containers = idContainers[idContainers.length - 1].getElementsByTagName('li');
-                if (containers && containers.length) {
-                    return containers[0];
-                }
-                break;
-            case 2:
-                return idContainers[idContainers.length - 1]
-        }
+    switch (ui_version) {
+        case 1:
+            const containers = idContainers[idContainers.length - 1].getElementsByTagName('li');
+            if (containers && containers.length) {
+                return containers[0];
+            }
+            break;
+        case 2:
+            return idContainers[idContainers.length - 1]
+        case 3:
+            return idContainers[idContainers.length - 1]
+
     }
 }
 
@@ -77,13 +102,13 @@ var observer = new MutationObserver(function (mutations) {
             return;
         }
         for (var i = 0; i < mutation.addedNodes.length; i++) {
-            if (mutation.addedNodes[i].classList &&
-                (
-                    mutation.addedNodes[i].classList.contains("BreadcrumbsItem__BreadcrumbsItemElement-sc-1hh8yo5-0") ||
-                    mutation.addedNodes[i].classList.contains("Droplist-sc-1z05y4v-0")
-                )
+            if (mutation.addedNodes[i].classList.contains("css-151rkes")) {
+                debugger;
+            }
+            if (mutation.addedNodes[i].classList
+                && !mutation.addedNodes[i].classList.contains("copy-jira-id-button")
             ) {
-                refresh()
+                debounce(refresh, 500)();
             }
         }
     });
