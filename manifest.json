@@ -6,7 +6,8 @@
     "content_scripts":[{
         "matches": ["http://*.atlassian.net/browse/*",
              "https://*.atlassian.net/browse/*",
-             "https://*.jira.com/browse/*" ],
+             "https://*.jira.com/browse/*",
+             "https://*.atlassian.com/browse/*" ],
         "js": ["contentScript.js"],
         "css": ["styles.css"],
         "run_at": "document_end"

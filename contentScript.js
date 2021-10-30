@@ -53,7 +53,7 @@ function getButtonParent() {
         case 1:
             const containers = idContainers[idContainers.length - 1].getElementsByTagName('li');
             if (containers && containers.length) {
-                return containers[0];
+                return containers[containers.length - 1];
             }
             break;
         case 2:
