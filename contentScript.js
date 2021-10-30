@@ -16,7 +16,7 @@ function isJira() {
     return document.getElementsByTagName("body")[0].getAttribute("id") === 'jira'
 }
 
-const debounce = (func, wait) => {
+function debounce(func, wait) {
     let timeout;
 
     return function executedFunction(...args) {
