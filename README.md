@@ -1,5 +1,13 @@
-# copy-jira-id
-Chrome Extension - Adds one click copy button to copy Atlassian Jira ID
-![snapshot](https://i.ibb.co/0mX0tbK/Screenshot-2019-11-07-at-11-59-12-PM.png)
+# eOCS Copy Jira Issue ID
 
-Find it on Chrome Web Store : [Copy JIRA ID](http://bit.ly/copy-jira-id) 
+A Google Chrome extension that allows you to copy the Jira Issue ID to the clipboard with a single click.
+
+![screenshot](screenshot.png)
+
+This is utilized for the development of the **eurofunk Operations Center Suite (eOCS)**. 👨‍💻
+
+## Installation
+
+1. Download the source code.
+2. Open Chrome extension manager.
+3. Load unpacked.

@@ -1,15 +1,36 @@
-.copy-jira-id-button{
-    font-size: 0.75em !important;
+.jira-copy-issue-id-btn {
     cursor: pointer !important;
     margin-inline-start: 5px;
-    font-weight: bold;
-    color: rgb(80, 95, 121) !important;
-    background: rgba(9, 30, 66, 0.04);
     border-radius: 3px;
-    border-width: 0px;
-    
+    background-color: var(--aui-button-default-bg-color);
+    border: 1px solid var(--aui-btn-border);
+    color: var(--aui-btn-text);
+    text-decoration: none;
+    position: absolute;
+    top: -8px;
+    width: 40px;
+    height: 25px;
 }
 
-.copy-jira-id-button:hover{
-    background: rgba(9, 30, 66, 0.08);
+.jira-copy-issue-id-btn:hover {
+    background-color: var(--aui-button-default-hover-bg-color);
+}
+
+.jira-copy-issue-id-icon {
+    transform: scale(.9);
+    position: absolute;
+    top: 5px;
+    left: 12.5px;
+}
+
+.jira-copy-issue-id-icon-hide {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    visibility: hidden;
+}
+
+.jira-copy-issue-id-icon-show {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    visibility: visible;
 }

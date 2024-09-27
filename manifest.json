@@ -1,18 +1,23 @@
 {
-    "name": "Copy JIRA ID",
-    "version": "0.1.6",
-    "description": "Copies JIRA ID.",
-    "manifest_version" : 2,
-    "content_scripts":[{
-        "matches": ["http://*.atlassian.net/browse/*",
-             "https://*.atlassian.net/browse/*",
-             "https://*.jira.com/browse/*",
-             "https://*.atlassian.com/browse/*" ],
-        "js": ["contentScript.js"],
-        "css": ["styles.css"],
-        "run_at": "document_end"
-    }],
-    "icons": {
-        "128": "icon_128.png"
+  "name": "eOCS Copy Jira Issue ID",
+  "version": "1.0.0",
+  "description": "Adds a button to copy the Jira issue ID to the clipboard.",
+  "manifest_version": 3,
+  "content_scripts": [
+    {
+      "matches": [
+        "https://jira.eurofunk.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ],
+      "run_at": "document_end"
     }
+  ],
+  "icons": {
+    "128": "icon128.png"
   }
+}
