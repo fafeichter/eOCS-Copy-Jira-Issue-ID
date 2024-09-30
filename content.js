@@ -1,18 +1,24 @@
-const svgNS = "http://www.w3.org/2000/svg"; // Namespace for SVG elements
+/**
+ * Namespace for SVG elements.
+ */
+const svgNS = "http://www.w3.org/2000/svg";
 
+/**
+ * CSS classes and ID constants.
+ */
 const copyButtonClass = 'jira-copy-issue-id-btn';
-
 const successIconId = 'copy-jira-issue-id-success-icon';
 const copyIconId = 'copy-jira-issue-id-copy-icon';
 const iconClass = 'jira-copy-issue-id-icon';
 const hideIconClass = 'jira-copy-issue-id-icon-hide';
-
 const showIconClass = 'jira-copy-issue-id-icon-show';
 
 let animationTimer = undefined;
+let isProcessing = false; // Indicates if a copy process is in progress.
 
-let isProcessing = false; // Indicates if a copy process is running (includes any animations)
-
+/**
+ * Refresh the copy button functionality by removing any existing buttons and adding a new one if on a Jira issue page.
+ */
 function refresh() {
     clearTimeout(animationTimer);
     isProcessing = false;
@@ -20,36 +26,36 @@ function refresh() {
     const currentUrl = window.location.href;
 
     if (isJiraIssueUrl(currentUrl)) {
-        // Remove probably existing copy button (only relevent in SPA)
-        let existingCopyButtons = document.getElementsByClassName(copyButtonClass);
-        for (const existingCopyButton of existingCopyButtons) {
-            existingCopyButton.remove();
-        }
+        // Remove existing copy buttons (relevant in SPA environments)
+        const existingCopyButtons = document.getElementsByClassName(copyButtonClass);
+        Array.from(existingCopyButtons).forEach(button => button.remove());
 
-        // Create new copy button
+        // Create a new copy button with icons
         const copyButton = document.createElement('button');
         copyButton.classList.add(copyButtonClass);
         copyButton.appendChild(createCopyIcon());
         copyButton.appendChild(createSuccessIcon());
 
-        // Register click listener to copy button
-        let jiraIssueId = findJiraIssueId() || '';
+        // Register click listener to copy Jira issue ID
+        const jiraIssueId = findJiraIssueId() || '';
         copyButton.onclick = () => copyTextToClipboard(jiraIssueId);
 
-        // Add copy button to DOM
+        // Add the copy button to the DOM
         const containerElement = getContainerElement();
         if (containerElement) {
-            containerElement.append(copyButton)
-        } else {
-            console.log('eOCS Copy Jira Issue ID: Current UI is not supported.')
+            containerElement.append(copyButton);
         }
     }
 }
 
+/**
+ * Creates and returns an SVG element for the copy icon.
+ * @returns {SVGElement} The copy icon SVG.
+ */
 function createCopyIcon() {
     const copyIcon = document.createElementNS(svgNS, "svg");
     copyIcon.id = copyIconId;
-    copyIcon.classList.add(iconClass, showIconClass)
+    copyIcon.classList.add(iconClass, showIconClass);
     copyIcon.setAttribute("xmlns", svgNS);
     copyIcon.setAttribute("width", "15");
     copyIcon.setAttribute("height", "15");
@@ -65,10 +71,14 @@ function createCopyIcon() {
     return copyIcon;
 }
 
+/**
+ * Creates and returns an SVG element for the success icon.
+ * @returns {SVGElement} The success icon SVG.
+ */
 function createSuccessIcon() {
     const successIcon = document.createElementNS(svgNS, "svg");
     successIcon.id = successIconId;
-    successIcon.classList.add(iconClass, hideIconClass)
+    successIcon.classList.add(iconClass, hideIconClass);
     successIcon.setAttribute("xmlns", svgNS);
     successIcon.setAttribute("width", "15");
     successIcon.setAttribute("height", "15");
@@ -103,6 +113,10 @@ function createSuccessIcon() {
     return successIcon;
 }
 
+/**
+ * Finds and returns the Jira Issue ID from the page title.
+ * @returns {string|null} The Jira Issue ID or null if not found.
+ */
 function findJiraIssueId() {
     // Get the page title
     const pageTitle = document.title;
@@ -114,12 +128,16 @@ function findJiraIssueId() {
     const issueId = pageTitle.match(issueIdRegex);
 
     if (!issueId) {
-        console.log("eOCS Copy Jira Issue ID: No Jira Issue ID found in the title");
+        alert("eOCS Copy Jira Issue ID: No Jira Issue ID found in the title.");
     }
 
-    return issueId;
+    return issueId ? issueId[0] : null;
 }
 
+/**
+ * Copies the provided text to the clipboard and triggers the success animation.
+ * @param {string} text The text to be copied to the clipboard.
+ */
 function copyTextToClipboard(text) {
     if (isProcessing) {
         return; // Do nothing if the copy action is already in progress
@@ -127,71 +145,68 @@ function copyTextToClipboard(text) {
 
     isProcessing = true;
 
-    navigator.clipboard.writeText(text).then(function () {
+    navigator.clipboard.writeText(text).then(() => {
         animateIcon();
-    }, function (err) {
+    }).catch(err => {
         isProcessing = false;
         alert(`Could not copy Jira Issue ID: ${err}`);
     });
 }
 
+/**
+ * Animates the switch between the copy icon and success icon after copying.
+ */
 function animateIcon() {
     const copyIcon = document.getElementById(copyIconId);
     const successIcon = document.getElementById(successIconId);
 
-    copyIcon.classList.remove(showIconClass);
-    copyIcon.classList.add(hideIconClass);
-    successIcon.classList.remove(hideIconClass);
-    successIcon.classList.add(showIconClass);
+    copyIcon.classList.replace(showIconClass, hideIconClass);
+    successIcon.classList.replace(hideIconClass, showIconClass);
 
     animationTimer = setTimeout(() => {
-        successIcon.classList.remove(showIconClass);
-        successIcon.classList.add(hideIconClass);
-        copyIcon.classList.remove(hideIconClass);
-        copyIcon.classList.add(showIconClass);
+        successIcon.classList.replace(showIconClass, hideIconClass);
+        copyIcon.classList.replace(hideIconClass, showIconClass);
 
         isProcessing = false;
     }, 1500);
 }
 
+/**
+ * Retrieves the container element where the copy button will be inserted.
+ * @returns {HTMLElement|undefined} The container element or undefined if not found.
+ */
 function getContainerElement() {
-    let idContainers = document.getElementsByClassName('aui-nav-breadcrumbs');
+    const idContainers = document.getElementsByClassName('aui-nav-breadcrumbs');
     if (!idContainers || !idContainers.length) {
         return undefined;
     }
 
     const containers = idContainers[idContainers.length - 1].getElementsByTagName('li');
-    if (containers && containers.length) {
-        return containers[containers.length - 1];
-    }
+    return containers.length ? containers[containers.length - 1] : undefined;
 }
 
+/**
+ * Checks whether the current URL corresponds to a Jira issue page.
+ * @param {string} url The current URL.
+ * @returns {boolean} True if the URL is a Jira issue page, false otherwise.
+ */
 function isJiraIssueUrl(url) {
-    // Jira issue URL regular expressions
     const regexList = [/browse\/[A-Z]+-\d+/, /projects\/[A-Z]+\/issues\/[A-Z]+-\d+/];
-
-    // check if the url path matches any regex in the list
     return regexList.some(regex => regex.test(new URL(url).pathname));
 }
 
-// Select the target node to observe
-const targetNode = document.querySelector('title'); // Can be any element to observe
+/**
+ * Observes changes to the page's title element and refreshes the copy button when a change is detected.
+ */
+const targetNode = document.querySelector('title');
+const observer = new MutationObserver(refresh);
 
-// Define the mutation observer callback function
-let observerCallback = function () {
-    refresh();
-};
-
-// Create a new MutationObserver instance
-const observer = new MutationObserver(observerCallback);
-
-// Configuration of the observer
+// Configuration of the observer.
 let config = {
     childList: true // Listen for changes to child nodes (additions/removals)
 };
 
-// Start observing the target node (for the SPA parts of Jira)
 observer.observe(targetNode, config);
 
-// Initial start (when opening Jira for the first time)
+// Initial start when opening Jira for the first time.
 refresh();

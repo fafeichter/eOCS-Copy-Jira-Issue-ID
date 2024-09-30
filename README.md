@@ -4,10 +4,12 @@ A Google Chrome extension that allows you to copy the Jira Issue ID to the clipb
 
 ![screenshot](screenshot.png)
 
-This is utilized for the development of the **eurofunk Operations Center Suite (eOCS)**. 👨‍💻
+This tool is designed for use in the development of the **eurofunk Operations Center Suite (eOCS)**. 👨‍💻
 
 ## Installation
 
-1. Download the source code.
-2. Open Chrome extension manager.
-3. Load unpacked.
+1. Download or clone the source code from this repository.
+2. Open Google Chrome and navigate to the **Extensions** page ([chrome://extensions](chrome://extensions)).
+3. Enable **Developer Mode** in the top-right corner.
+4. Click **Load unpacked** and select the folder where you downloaded the source code.
+5. The extension is now ready for use!
