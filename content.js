@@ -128,7 +128,7 @@ function findJiraIssueId() {
     const issueId = pageTitle.match(issueIdRegex);
 
     if (!issueId) {
-        alert("eOCS Copy Jira Issue ID: No Jira Issue ID found in the title.");
+        // alert("eOCS Copy Jira Issue ID: No Jira Issue ID found in the title.");
     }
 
     return issueId ? issueId[0] : null;
